@@ -1,0 +1,72 @@
+<script src="https://unpkg.com/vue"></script>
+
+<!---------------------------->
+<!-- 데이터 반응형 막는 방법 -->
+<!---------------------------->
+
+<div id="app">
+    <p>{{ foo }}</p>
+    <!-- obj.foo는 더이상 변하지 않습니다! -->
+    <button v-on:click="foo = 'baz'">Change it</button>
+  </div>
+
+<script>
+    var obj = {
+        foo: 'bar'
+    }
+
+    Object.freeze(obj)
+
+    new Vue({
+        el: '#app',
+        data: obj
+    })
+</script>
+<hr></hr>
+
+<!--------------------->
+<!-- vue에서 $의 의미 -->
+<!--------------------->
+<script>
+
+    // 참고 : https://github.com/devhaeyeon/vueExample/wiki/vue%EC%97%90%EC%84%9C-$%EC%9D%98-%EC%9D%98%EB%AF%B8
+    //      : https://stackoverflow.com/questions/56881724/what-does-the-dollar-prefix-mean-in-vue-js
+    new Vue({
+        data: {
+            // off $
+            appName: 'Off dollar sign'
+        },
+        created: function () {
+            console.log(this.appName)
+        }
+    })
+    //-----------------------------------------
+    new Vue({
+        data: {
+            // on $
+            $appName: 'On dollar sign'
+        },
+        created: function () {
+            console.log(this.appName)
+        }
+    })
+</script>
+
+<!------------------>
+<!-- vue 생명주기 -->
+<!------------------>
+
+<script>
+    new Vue({
+        data: {
+            a: 1
+        },
+        beforeCreated: function () {
+            console.log('a is: ' + this.a)
+        },
+        created: function () {
+            console.log('a is: ' + this.a)
+        }
+    })
+</script>
+
