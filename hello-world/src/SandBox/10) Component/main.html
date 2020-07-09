@@ -1,0 +1,135 @@
+<script src="https://unpkg.com/vue"></script>
+
+<!--------------->
+<!-- component -->
+<!--------------->
+
+<!-- 컴포넌트는 HTML 속성을 확장하여 재사용 가능한 코드를 캡슐화한 것. -->
+
+<div id="app1">
+    <!-- 전역 컴포넌트 -->
+    <my-component1></my-component1><br>
+
+    <!-- 지역 컴포넌트 -->
+    <my-component2></my-component2><br>
+
+    <!-- <ul>,<ol>,<table>과<select>와 같은 일부 엘리먼트는 제한적으로 component를 사용 못함. -->
+    <!-- <table>                  -->
+    <!--    <my-row>...</my-row>  -->
+    <!-- </table>                 -->
+
+    <!-- 그래서 이렇게 써야함. -->
+    <table>
+        <tr is="my-row"></tr>
+    </table>
+
+    <my-component3></my-component3>
+    <my-component3></my-component3>
+    <my-component3></my-component3><br>
+    
+    <my-component4></my-component4>
+    <my-component4></my-component4>
+    <my-component4></my-component4><br>
+</div>
+    <script>
+        var Child = {
+            template: '<div>사용자 정의 컴포넌트 입니다!</div>'
+        }
+
+        var data = { counter: 0 }
+
+        Vue.component('my-component1', {
+            template: '<div>사용자 정의 컴포넌트 입니다!</div>'
+        })
+
+        // component의 data는 함수여야 합니다.
+        Vue.component('my-component3', {
+            template: '<button v-on:click="counter += 1">{{ counter }}</button>',
+            data: function () {
+                return data
+            }
+        })
+
+        // 같은 컴포넌트 인스턴스에서는 data를 공유합니다. 그래서 각 counter를 부여해야 합니다.
+        Vue.component('my-component4', {
+            template: '<button v-on:click="counter += 1">{{ counter }}</button>',
+            data: function () {
+                return {
+                    counter: 0
+                }
+            }
+        })
+
+        new Vue({
+            el: '#app1',
+            data: {
+                
+            },
+            components: {
+                'my-component2': Child,
+                'my-row': ""
+            }
+        })
+    </script>
+<hr></hr>
+
+<!----------->
+<!-- props -->
+<!----------->
+
+<!-- 부모-자식 컴포넌트에서 props는 부모가 자식에게 events는 자식이 부모에게 보냅니다. -->
+
+<div id="app2">
+    <child my-message="안녕하세요!"></child>
+
+    <!-- 동적 Props -->
+    <!-- props를 동적으로 바인딩 할 수 있습니다.  -->
+    <!-- v-bind만 쓰면 객체의 모든 속성을 props로 전달됩니다. -->
+    <input v-model="parentMsg">
+    <br>
+    <child v-bind:my-message="parentMsg"></child>
+
+    <!-- v-bind를 안하면 "1"은 문자열로 인식합니다. -->
+    <comp some-prop="1"></comp>
+    <!-- 이것은 실제 숫자로 전달합니다. -->
+    <comp v-bind:some-prop="1"></comp>
+
+</div>
+    <script>
+        // prop는 자식에게 정보를 전달하기 위한 속성입니다.
+        // 정의를 할 때 JS는 카멜 표기법
+        // HTML은 케밥케이스를 사용해야합니다.
+        Vue.component('child', {
+            props: ['myMessage'],
+            template: '<span>{{ myMessage }}</span>'
+        })
+
+        // 부모에서 자식으로 단방향으로만 데이터 전송이 가능합니다.
+        // 만약 자식에서 부모로 데이터 전송이 필요할 케이스가 있습니다.
+
+        // 1. prop의 초기 값이 필요한 경우 초기 값으로 사용하는 로컬 데이터 속성을 정의 하십시오
+        Vue.component('test1', {
+            props: ['initialCounter'],
+            data: function () {
+                return { counter: this.initialCounter }
+            }
+        })
+
+        //2. prop는 변경되어야 할 원시 값으로 전달되는 것을 prop 값으로 부터 계산된 속성을 정의하세요.
+        Vue.component('test2', {
+            props: ['size'],
+            computed: {
+                normalizedSize: function () {
+                    return this.size.trim().toLowerCase()
+                }
+            }
+        })
+        
+        new Vue({
+            el: '#app2',
+            data: {
+                parentMsg: ""
+            }
+        })
+    </script>
+<hr></hr>
