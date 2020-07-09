@@ -1,0 +1,156 @@
+<script src="https://unpkg.com/vue"></script>
+
+<!------------->
+<!-- v-model -->
+<!------------->
+
+<!-- 양방향 데이터 바인딩이 가능합니다. -->
+
+<div id="app1">
+    <!-- 문자열 -->
+    <input v-model="message1" placeholder="여기를 수정해보세요">
+    <p>메시지: {{ message1 }}</p>
+
+    <!-- 줄 바꿈이 가능한 문자열 -->
+    <textarea v-model="message2" placeholder="여러줄을 입력해보세요"></textarea><br>
+    <span>줄 바꿈이 가능한 메시지:</span><p style="white-space: pre-line">{{ message2 }}</p><br>
+
+    <!-- 체크박스 -->
+    <input type="checkbox" id="checkbox" v-model="checked">
+    <label for="checkbox">{{ checked }}</label><br><br>
+
+    <!-- 체크박스 배열 -->
+    <input type="checkbox" id="jack" value="Jack" v-model="checkedNames">
+    <label for="jack">Jack</label>
+    <input type="checkbox" id="john" value="John" v-model="checkedNames">
+    <label for="john">John</label>
+    <input type="checkbox" id="mike" value="Mike" v-model="checkedNames">
+    <label for="mike">Mike</label>
+    <br>
+    <span>체크한 이름: {{ checkedNames }}</span><br><br>
+
+    <!-- 라디오 -->
+    <input type="radio" id="one" value="One" v-model="picked">
+    <label for="one">One</label>
+    <br>
+    <input type="radio" id="two" value="Two" v-model="picked">
+    <label for="two">Two</label>
+    <br>
+    <span>선택: {{ picked }}</span><br><br>
+
+    <!-- 셀렉트 -->
+    <select v-model="selected1">
+        <option disabled value="">Please select one</option>
+        <option>A</option>
+        <option>B</option>
+        <option>C</option>
+    </select>
+    <span>선택함: {{ selected1 }}</span><br><br>
+
+    <!-- 다중 셀렉트 -->
+    <select v-model="selected2" multiple>
+        <option>A</option>
+        <option>B</option>
+        <option>C</option>
+    </select>
+    <br>
+    <span>Selected: {{ selected2 }}</span><br><br>
+
+    <!-- 동적 옵션 렌더링 -->
+    <select v-model="selected3">
+        <option v-for="option in options" v-bind:value="option.value">
+          {{ option.text }}
+        </option>
+    </select>
+    <span>Selected: {{ selected3 }}</span>
+</div>
+    <script>
+        new Vue({
+            el: '#app1',
+            data: {
+                message1: "",
+                message2: "",
+                checked: false,
+                checkedNames: [],
+                picked: "",
+                selected1: "",
+                selected2: [],
+                selected3: "",
+                options: [
+                    { text: 'One', value: 'A' },
+                    { text: 'Two', value: 'B' },
+                    { text: 'Three', value: 'C' }
+                ]
+            }
+        })
+    </script>
+<hr></hr>
+
+<!------------------->
+<!-- 값 바인딩하기 -->
+<!------------------->
+
+<div id="app2">
+    <!-- 체크박스 -->
+    <!-- vm.toggle === 'yes' -->
+    <!-- vm.toggle === 'no' -->
+    <input
+        type="checkbox"
+        v-model="toggle"
+        true-value="yes"
+        false-value="no"
+    >
+
+    <!-- 라디오 -->
+    <!-- vm.pick === vm.a -->
+    <input type="radio" v-model="pick" v-bind:value="value">
+
+    <!-- 셀렉트 옵션 -->
+    <select v-model="selected">
+        <option v-bind:value="{ number: 123 }">123</option>
+    </select>
+
+</div>
+    <script>
+        var vm1 = new Vue({
+            el: '#app2',
+            data: {
+                value: "바인딩 성공",
+                pick: "",
+                toggle: "yes",
+                selected: ""
+            }
+        })
+    </script>
+<hr></hr>
+
+<!------------>
+<!-- 수식어 -->
+<!------------>
+
+<div id="app3">
+    <!-- .lazy -->
+    <!-- 값 입력이 끝날 때 데이터 바인딩이 됩니다. -->
+    <input v-model.lazy="msg1" >
+
+    <!-- .number -->
+    <!-- 숫자로 형변환 -->
+    <input v-model.number="age" type="number">
+
+    <!-- .trim -->
+    <!-- 띄어쓰기, 개행을 제외한 msg2값을 가져올 수 있게 된다. -->
+    <input v-model.trim="msg2">
+
+</div>
+    <script>
+        var vm2 = new Vue({
+            el: '#app3',
+            data: {
+                msg1: "",
+                msg2: "",
+                age: "",
+            }
+        })
+    </script>
+<hr></hr>
+
