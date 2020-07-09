@@ -1,0 +1,30 @@
+<script src="https://unpkg.com/vue"></script>
+
+<!------------------>
+<!-- 이벤트 리스너 -->
+<!------------------>
+
+<div id="app1">
+    <button v-on:click="counter += 1">Add 1</button>
+    <p>위 버튼을 클릭한 횟수는 {{ counter }} 번 입니다.</p>
+    
+    <!-- 메소드 호출 -->
+    <button v-on:click="greet">Greet</button>
+</div>
+    <script>
+        new Vue({
+            el: '#app1',
+            data: {
+                counter: 0
+            },
+            methods: {
+                greet: function (event) {
+                    alert('Hello ' + this.name + '!')
+                    if (event) {
+                        alert(event.target.tagName)
+                    }
+                }
+            }
+        })
+    </script>
+<hr></hr>
