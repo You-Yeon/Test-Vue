@@ -1,0 +1,114 @@
+<script src="https://unpkg.com/vue"></script>
+
+<!------------------>
+<!-- 클래스 바인딩 -->
+<!------------------>
+
+<!-- 객체 -->
+
+<div id="app1">
+    <div
+        class= "static" 
+        v-bind:class="{ active: isActive, 'text-danger' : hasError }"
+    ></div>
+
+    <div class="static active"></div>
+</div>
+    <script>
+        new Vue({
+            el: '#app1',
+            data: {
+                isActive: true,
+                hasError: false            
+            }
+        })
+    </script>
+<hr></hr>
+
+<div id="app2">
+    <div v-bind:class="classObject1"></div>
+    <div v-bind:class="classObject2"></div>
+</div>
+    <script>
+        new Vue({
+            el: '#app2',
+            data: {
+                classObject1: {
+                    active: true,
+                    'text-danger': false
+                },
+                isActive: true,
+                error: null
+            },
+            computed: {
+                classObject2: function () {
+                    return {
+                        active: this.isActive && !this.error,
+                        'text-danger': this.error && this.error.type === 'fatal'
+                    }
+                }
+            }
+        })
+    </script>
+<hr></hr>
+
+<!-- 배열 -->
+
+<div id="app3">
+    <div v-bind:class="[activeClass, errorClass]"></div>
+    <div class="active text-danger"></div>
+    <div v-bind:class="[isActive ? activeClass : '', errorClass]"></div>
+    <div v-bind:class="[{ active: isActive }, errorClass]"></div>
+
+    <my-component class="baz boo"></my-component>
+    <p class="foo bar baz boo">Hi</p>
+    <my-component v-bind:class="{ active: isActive }"></my-component>
+    <p class="foo bar active">Hi</p>
+</div>
+    <script>
+        Vue.component('my-component', {
+            template: '<p class="foo bar">Hi</p>'
+        })
+
+        new Vue({
+            el: '#app3',
+            data: {
+                isActive: true,
+                activeClass: 'active',
+                errorClass: 'text-danger'
+            }
+        })
+    </script>
+<hr></hr>
+
+<!------------------>
+<!-- 스타일 바인딩 -->
+<!------------------>
+
+<!-- 속성 이름은 카멜표기법과 케밥케이스 사용해야 함 -->
+<div id="app4">
+    <!-- 객체 -->
+    <div v-bind:style="{ color: activeColor, fontSize: fontSize + 'px' }"></div>
+    <div v-bind:style="styleObject"></div>
+
+    <!-- 배열 -->
+    <div v-bind:style="[baseStyles, overridingStyles]"></div>
+
+    <!-- 다중 값 제공 -->
+    <!-- 브라우저가 지원하는 배열의 마지막 값만 렌더링합니다. -->
+    <div v-bind:style="{ display: ['-webkit-box', '-ms-flexbox', 'flex'] }"></div>
+</div>
+    <script>
+        new Vue({
+            el: '#app4',
+            data: {
+                activeColor: 'red',
+                fontSize: 30,
+                styleObject: {
+                    color: 'red',
+                    fontSize: '13px'
+                }
+            }
+        })
+    </script>
+<hr></hr>
