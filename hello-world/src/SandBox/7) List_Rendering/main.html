@@ -1,0 +1,261 @@
+<script src="https://unpkg.com/vue"></script>
+
+<!----------->
+<!-- v-for -->
+<!----------->
+
+<div id="app1">
+    <li v-for="item in items">
+        {{ item.message }}
+    </li>
+
+    <li v-for="(item, index) in items">
+        {{ parentMessage }} - {{ index }} - {{ item.message }}
+    </li>
+
+    <li v-for="(item, index) of items">
+        {{ parentMessage }} - {{ index }} - {{ item.message }}
+    </li>
+
+    <li v-for="value in object">
+        {{ value }}
+    </li>
+
+    <!-- 순서 유의 -->
+    <div v-for="(value, name, index) in object">
+        {{ index }}. {{ name }}: {{ value }}
+    </div>
+
+    <!-- v-bind:key를 통해서 key 값을 바인딩하면 기존 속성을 재사용, 재정렬이 가능합니다. -->
+    <div v-for="item in items" v-bind:key="item.id">
+        <!-- content -->
+    </div>
+
+</div>
+    <script>
+        new Vue({
+            el: '#app1',
+            data: {
+                parentMessage: 'Parent',
+                items: [
+                    { message: 'Foo' },
+                    { message: 'Bar' }
+                ],
+                object: {
+                    title: 'How to do lists in Vue',
+                    author: 'You yeon',
+                    publishedAt: '2020-07-09'
+                }
+            }
+        })
+    </script>
+<hr></hr>
+
+<!-- 배열 메소드 종류-->
+<!-- push()
+     pop()
+     shift()
+     unshift()
+     splice()
+     sort()
+     reverse() -->
+
+<!-- 원본 배열을 변형하는 것이 아닌, 완전 새로운 배열로 반환하는 방법 -->
+<script>
+    // console에서 확인 가능..
+    example1.items = example1.items.filter(function (item) {
+        return item.message.match(/Foo/)
+    })
+</script>
+
+<!--------------->
+<!-- 주의 사항 -->
+<!--------------->
+
+<script>
+    var vm = new Vue({
+        data: {
+            items: ['a', 'b', 'c']
+        }
+    })
+    
+    // 다음과 같이 임의로 값을 바꾸거나 길이를 바꾸면 배열 데이터에 대해 변화 감지를 못함.
+    vm.items[1] = 'x' 
+    vm.items.length = 2 
+
+    // 다음과 같이 사용해야 변화 감지 가능.
+    Vue.set(vm.items, indexOfItem, newValue)
+    vm.items.splice(indexOfItem, 1, newValue)
+    vm.$set(vm.items, indexOfItem, newValue)
+    vm.items.splice(newLength)
+
+    //또는 기존 객체에 새 속성 할당도 가능.
+    Object.assign(vm.userProfile, {
+        age: 27,
+        favoriteColor: 'Vue Green'
+    })
+
+    // 새로운 객체 할당은 다음과 같이..
+    vm.userProfile = Object.assign({}, vm.userProfile, {
+        age: 27,
+        favoriteColor: 'Vue Green'
+    })
+</script>
+
+<!------------------------------->
+<!-- 정렬 결과를 배열로 표시하기 -->
+<!------------------------------->
+
+<div id="app2">
+    <!-- 계산된 값을 캐싱 -->
+    <li v-for="n in evenNumbers">{{ n }}</li>
+
+    <!-- 계산된 값을 계속 갱신 -->
+    <li v-for="n in even(numbers)">{{ n }}</li>
+</div>
+    <script>
+        new Vue({
+            el: '#app2',
+            data: {
+                    numbers: [ 1, 2, 3, 4, 5 ]
+                },
+            computed: {
+                evenNumbers: function () {
+                        return this.numbers.filter(function (number) {
+                            return number % 2 === 0
+                    })
+                }
+            },
+            methods: {
+                even: function (numbers) {
+                    return numbers.filter(function (number) {
+                        return number % 2 === 0
+                    })
+                }
+            }
+            
+        })
+    </script>
+<hr></hr>
+
+<!-------------------->
+<!-- v-for 범위 지정 -->
+<!-------------------->
+
+<div id="app3">
+    <span v-for="n in 10">{{ n }} </span>
+</div>
+    <script>
+        new Vue({
+            el: '#app3',
+            data: {
+                    n: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ]
+            }
+        })
+    </script>
+<hr></hr>
+
+<!------------------>
+<!-- v-for 템플릿 -->
+<!------------------>
+
+<div id="app4">
+    <ul>
+        <template v-for="item in items">
+          <li>{{ item.msg }}</li>
+          <li class="divider" role="presentation"></li>
+        </template>
+    </ul>
+</div>
+    <script>
+        new Vue({
+            el: '#app4',
+            data: {
+                items: [
+                    { msg: 'Foo' },
+                    { msg: 'Bar' }
+                ],
+            }
+        })
+    </script>
+<hr></hr>
+
+<!------------------>
+<!-- v-for과 v-if -->
+<!------------------>
+
+<!-- v-for이 v-if보다 우선순위가 높습니다. -->
+<!-- 즉, v-if는 루프돌 때마다 실행됩니다. -->
+<li v-for="todo in todos" v-if="!todo.isComplete">
+    {{ todo }}
+</li>
+<hr></hr>
+
+<!--------------------->
+<!-- v-for과 컴포넌트 -->
+<!--------------------->
+
+<div id="todo-list-example">
+    <form v-on:submit.prevent="addNewTodo">
+      <label for="new-todo">Add a todo</label>
+      <input
+        v-model="newTodoText"
+        id="new-todo"
+        placeholder="E.g. Feed the cat"
+      >
+      <button>Add</button>
+    </form>
+    <ul>
+      <li
+        is="todo-item"
+        v-for="(todo, index) in todos"
+        v-bind:key="todo.id"
+        v-bind:title="todo.title"
+        v-on:remove="todos.splice(index, 1)"
+      ></li>
+    </ul>
+</div>
+
+<script>
+    Vue.component('todo-item', {
+        template: '\
+            <li>\
+            {{ title }}\
+            <button v-on:click="$emit(\'remove\')">Remove</button>\
+            </li>\
+        ',
+        props: ['title']
+        })
+
+        new Vue({
+        el: '#todo-list-example',
+        data: {
+            newTodoText: '',
+            todos: [
+                {
+                    id: 1,
+                    title: 'Do the dishes',
+                },
+                {
+                    id: 2,
+                    title: 'Take out the trash',
+                },
+                {
+                    id: 3,
+                    title: 'Mow the lawn'
+                }
+            ],
+            nextTodoId: 4
+        },
+        methods: {
+            addNewTodo: function () {
+                this.todos.push({
+                    id: this.nextTodoId++,
+                    title: this.newTodoText
+            })
+                this.newTodoText = ''
+            }
+        }
+    })
+</script>
+<hr></hr>
